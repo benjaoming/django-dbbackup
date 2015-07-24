@@ -16,8 +16,12 @@ DEV_NULL = open(os.devnull, 'w')
 class FakeStorage(BaseStorage):
     name = 'FakeStorage'
     list_files = ['foo', 'bar']
-    deleted_files = []
     file_read = ENCRYPTED_FILE
+
+    def __init__(self, *args, **kwargs):
+        super(FakeStorage, self).__init__(*args, **kwargs)
+        self.deleted_files = []
+        self.written_files = []
 
     def delete_file(self, filepath):
         self.deleted_files.append(filepath)
@@ -26,7 +30,7 @@ class FakeStorage(BaseStorage):
         return self.list_files
 
     def write_file(self, filehandle, filename):
-        pass
+        self.written_files.append((filename, filehandle))
 
     def read_file(self, filepath):
         return open(self.file_read, 'rb')

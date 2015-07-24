@@ -92,14 +92,18 @@ class Command(BaseCommand):
         # TODO: WTF is this??
         return settings.DATABASES['default']['NAME']
 
+    def get_source_dir(self):
+        # TODO: WTF again ??
+        return dbbackup_settings.MEDIA_PATH
+
     def create_backup_file(self, source_dir, backup_basename, **kwargs):
-        temp_dir = tempfile.mkdtemp(dir = dbbackup_settings.TMP_DIR)
+        temp_dir = tempfile.mkdtemp(dir=dbbackup_settings.TMP_DIR)
         try:
             backup_filename = os.path.join(temp_dir, backup_basename)
             try:
                 tar_file = tarfile.open(backup_filename, 'w|gz') \
-                if kwargs.get('compress') \
-                else tarfile.open(backup_filename, 'w')
+                    if kwargs.get('compress') \
+                    else tarfile.open(backup_filename, 'w')
 
                 try:
                     tar_file.add(source_dir)
@@ -112,9 +116,6 @@ class Command(BaseCommand):
                     os.remove(backup_filename)
         finally:
             os.rmdir(temp_dir)
-
-    def get_source_dir(self):
-        return dbbackup_settings.MEDIA_PATH
 
     def cleanup_old_backups(self):
         """ Cleanup old backups, keeping the number of backups specified by
