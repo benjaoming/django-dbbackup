@@ -142,3 +142,37 @@ credentionals. Skip for anonymous FTP.
 
 **DBBACKUP\_FTP\_PATH** - The directory on remote FTP server you wish to
 save your backups.
+
+Django built-in storage API
+---------------------------
+
+Django has its own storage API for manage media files, dbbackup allows to
+use it and all third Django storage. Default storage is FileSystemStorage
+which is integrated to Django but we invite you to take a look at
+`django-storages-redux`_ which has a great collection of storages.
+
+Setup in your Django project
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For use Django's built-in `FileSystemStorage`_, add the following lines to your ``settings.py``: ::
+
+    DBBACKUP_STORAGE = 'dbbackup.storage.builtin_django'
+    # Useless because it's default value
+    # DBBACKUP_DJANGO_STORAGE = 'django.core.file.storagesFileSystemStorage.'
+    DBBACKUP_STORAGE_OPTIONS = {'location': '/mybackupdir/'}
+
+Available Settings
+~~~~~~~~~~~~~~~~~~
+
+**DBBACKUP_DJANGO_STORAGE** - Path to a Django Storage class (in Python dot style).
+
+.. warning ::
+
+    Do not use a Django storage and without configure its options, otherwise you will risk to mix media files (with public access) and backups (strictly private).
+
+**DBBACKUP_STORAGE_OPTIONS** - Dictionary used to instantiate a Django Storage class.you wish to
+save your backups.
+
+.. _django-storages-redux: https://github.com/jschneier/django-storages
+.. _FileSystemStorage: https://docs.djangoproject.com/en/1.8/ref/files/storage/#the-filesystemstorage-class
+
