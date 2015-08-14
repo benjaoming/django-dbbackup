@@ -146,19 +146,21 @@ save your backups.
 Django built-in storage API
 ---------------------------
 
-Django has its own storage API for manage media files, dbbackup allows to
-use it and all third Django storage. Default storage is FileSystemStorage
-which is integrated to Django but we invite you to take a look at
-`django-storages-redux`_ which has a great collection of storages.
+Django has its own storage API for managing media files. Dbbackup allows 
+you to use (third-party) Django storage backends. The default backend is
+``FileSystemStorage``, which is integrated in Django but we invite you
+to take a look at `django-storages-redux`_ which has a great collection of
+storage backends.
 
-Setup in your Django project
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Django project settings
+~~~~~~~~~~~~~~~~~~~~~~~
 
-For use Django's built-in `FileSystemStorage`_, add the following lines to your ``settings.py``: ::
+To use Django's built-in `FileSystemStorage`_, add the following lines to
+your ``settings.py``::
 
     DBBACKUP_STORAGE = 'dbbackup.storage.builtin_django'
-    # Useless because it's default value
-    # DBBACKUP_DJANGO_STORAGE = 'django.core.file.storagesFileSystemStorage.'
+    # Default
+    # DBBACKUP_DJANGO_STORAGE = 'django.core.file.storages.FileSystemStorage'
     DBBACKUP_STORAGE_OPTIONS = {'location': '/mybackupdir/'}
 
 Available Settings
@@ -168,10 +170,9 @@ Available Settings
 
 .. warning ::
 
-    Do not use a Django storage and without configure its options, otherwise you will risk to mix media files (with public access) and backups (strictly private).
+    Do not use a Django storage backend without configuring its options, otherwise you will risk mixing media files (with public access) and backups (strictly private).
 
-**DBBACKUP_STORAGE_OPTIONS** - Dictionary used to instantiate a Django Storage class.you wish to
-save your backups.
+**DBBACKUP_STORAGE_OPTIONS** - Dictionary used to instantiate a Django Storage class. The ``location`` key customizes the directory for ``FileSystemStorage``.
 
 .. _django-storages-redux: https://github.com/jschneier/django-storages
 .. _FileSystemStorage: https://docs.djangoproject.com/en/1.8/ref/files/storage/#the-filesystemstorage-class
